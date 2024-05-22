@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { productValidationSchema } from "./product.validation";
 import { productServices } from "./product.service";
+import { Tproduct } from "./product.interface";
 
 // ! for createing new produuct
 const createPorduct = async (req: Request, res: Response) => {
@@ -44,10 +45,23 @@ const getAllProducts = async (req: Request, res: Response) => {
   try {
     const result = await productServices.getDataFromDB();
 
+    const productObj = result?.map((product: any) => {
+      const productObj = product.toObject();
+      const { _id, __v, ...responseWithoutId } = productObj;
+
+      responseWithoutId.variants = responseWithoutId.variants.map(
+        ({ _id, ...varient }) => varient
+      );
+      const { _id: inventoryId, ...inventory } = responseWithoutId.inventory;
+      responseWithoutId.inventory = inventory;
+
+      return responseWithoutId;
+    });
+
     res.status(200).json({
       success: true,
       message: "Products fetched successfully!",
-      data: result,
+      data: productObj,
     });
   } catch (error: any) {
     res.status(400).json({ success: false, message: error.message });
