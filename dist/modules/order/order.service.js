@@ -20,7 +20,7 @@ const createOrderInDB = (orderData) => __awaiter(void 0, void 0, void 0, functio
     var _a;
     const productData = yield product_service_1.productServices.getSinglePorductDB(orderData.productId);
     if (!productData) {
-        throw new Error("Product not found");
+        throw new Error("Order not found");
     }
     if (orderData.quantity > ((_a = productData === null || productData === void 0 ? void 0 : productData.inventory) === null || _a === void 0 ? void 0 : _a.quantity)) {
         throw new Error("Insufficient quantity available in inventory");

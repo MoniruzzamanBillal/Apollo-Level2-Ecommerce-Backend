@@ -16,7 +16,7 @@ app.use("/api", orderRouter);
 
 app.get("/", async (req: Request, res: Response, next: NextFunction) => {
   try {
-    res.send({ message: "server is running 2 !! " });
+    res.send({ message: "server is running  !! " });
   } catch (error) {
     next(error);
   }

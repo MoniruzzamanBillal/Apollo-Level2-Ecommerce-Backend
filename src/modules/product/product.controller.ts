@@ -18,7 +18,7 @@ const createPorduct = async (req: Request, res: Response) => {
     const { _id, __v, ...responseWithoutId } = productResponse as Tproduct;
 
     responseWithoutId.variants = responseWithoutId.variants.map(
-      ({ _id, ...variant }) => variant
+      ({ _id, ...variant }) => variant,
     );
 
     const { _id: inventoryId, ...inventory } = responseWithoutId.inventory;
@@ -52,7 +52,7 @@ const getAllProducts = async (req: Request, res: Response) => {
       const { _id, __v, ...responseWithoutId } = productObj as Tproduct;
 
       responseWithoutId.variants = responseWithoutId.variants.map(
-        ({ _id, ...varient }) => varient
+        ({ _id, ...varient }) => varient,
       );
       const { _id: inventoryId, ...inventory } = responseWithoutId.inventory;
       responseWithoutId.inventory = inventory;
@@ -86,7 +86,7 @@ const getSingleProduuct = async (req: Request, res: Response) => {
     responseWithoutId.inventory = inventory;
 
     responseWithoutId.variants = responseWithoutId.variants.map(
-      ({ _id, ...varient }) => varient
+      ({ _id, ...varient }) => varient,
     );
 
     res.status(200).json({
@@ -109,7 +109,7 @@ const updatePorduct = async (req: Request, res: Response) => {
 
     const updatedResult = await productServices.updatePorductDatabase(
       productId,
-      parsedValidationData
+      parsedValidationData,
     );
 
     if (!updatedResult) {
@@ -126,7 +126,7 @@ const updatePorduct = async (req: Request, res: Response) => {
     dataWithoutId.inventory = inventory;
 
     dataWithoutId.variants = dataWithoutId.variants.map(
-      ({ _id, ...varient }) => varient
+      ({ _id, ...varient }) => varient,
     );
 
     res.status(200).json({

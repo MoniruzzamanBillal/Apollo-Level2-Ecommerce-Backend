@@ -70,7 +70,9 @@ const getAllProducts = (req, res) => __awaiter(void 0, void 0, void 0, function*
         });
         res.status(200).json({
             success: true,
-            message: "Products fetched successfully!",
+            message: searchTerm
+                ? `Products matching search term '${searchTerm}' fetched successfully!`
+                : "Products fetched successfully!",
             data: productObj,
         });
     }

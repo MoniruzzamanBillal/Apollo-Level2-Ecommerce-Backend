@@ -5,7 +5,7 @@ import orderModel from "./order.model";
 // ! create order into DBb
 const createOrderInDB = async (orderData: Torder) => {
   const productData = await productServices.getSinglePorductDB(
-    orderData.productId
+    orderData.productId,
   );
 
   if (!productData) {
