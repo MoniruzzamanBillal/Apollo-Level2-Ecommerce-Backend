@@ -1,7 +1,8 @@
-import express, { Application, Request, Response } from "express";
+import express, { Application, NextFunction, Request, Response } from "express";
 import cors from "cors";
 import morgan from "morgan";
 import { productRouter } from "./modules/product/product.route";
+import { orderRouter } from "./modules/order/order.route";
 
 const app: Application = express();
 
@@ -11,13 +12,18 @@ app.use(morgan("dev"));
 
 // ! rouutes
 app.use("/api", productRouter);
+app.use("/api", orderRouter);
 
-app.use("/", async (req: Request, res: Response) => {
-  res.status(200).json({ message: "server is running  !! " });
+app.get("/", async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    res.send({ message: "server is running 2 !! " });
+  } catch (error) {
+    next(error);
+  }
 });
 
 app.all("*", async (req: Request, res: Response) => {
-  res.status(400).json({ message: "cannot get this route " });
+  res.status(400).json({ success: false, message: "Route not found " });
 });
 
 export default app;

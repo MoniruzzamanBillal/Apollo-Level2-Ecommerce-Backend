@@ -15,7 +15,7 @@ const createPorduct = async (req: Request, res: Response) => {
 
     const productResponse = result.toObject();
 
-    const { _id, __v, ...responseWithoutId } = productResponse;
+    const { _id, __v, ...responseWithoutId } = productResponse as Tproduct;
 
     responseWithoutId.variants = responseWithoutId.variants.map(
       ({ _id, ...variant }) => variant
@@ -49,7 +49,7 @@ const getAllProducts = async (req: Request, res: Response) => {
 
     const productObj = result?.map((product: any) => {
       const productObj = product.toObject();
-      const { _id, __v, ...responseWithoutId } = productObj;
+      const { _id, __v, ...responseWithoutId } = productObj as Tproduct;
 
       responseWithoutId.variants = responseWithoutId.variants.map(
         ({ _id, ...varient }) => varient
@@ -79,7 +79,7 @@ const getSingleProduuct = async (req: Request, res: Response) => {
 
     const productObj = result?.toObject();
 
-    const { _id, __v, ...responseWithoutId } = productObj;
+    const { _id, __v, ...responseWithoutId } = productObj as Tproduct;
     const { _id: inventoryId, ...inventory } = responseWithoutId.inventory;
     responseWithoutId.inventory = inventory;
 
