@@ -95,10 +95,51 @@ const getSingleProduuct = async (req: Request, res: Response) => {
   }
 };
 
+// ! upudate product
+const updatePorduct = async (req: Request, res: Response) => {
+  try {
+    const { productId } = req.params;
+    const data = req.body;
+
+    const parsedValidationData = productValidationSchema.partial().parse(data);
+
+    const updatedResult = await productServices.updatePorductDatabase(
+      productId,
+      parsedValidationData
+    );
+
+    if (!updatedResult) {
+      return res.status(400).json({
+        success: false,
+        message: "Product not found ",
+      });
+    }
+
+    const updateDataObj = updatedResult.toObject();
+    const { _id, __v, ...dataWithoutId } = updateDataObj;
+    const { _id: inventoryId, ...inventory } = dataWithoutId.inventory;
+
+    dataWithoutId.inventory = inventory;
+
+    dataWithoutId.variants = dataWithoutId.variants.map(
+      ({ _id, ...varient }) => varient
+    );
+
+    res.status(200).json({
+      success: true,
+      message: "Product updated successfully!",
+      data: dataWithoutId,
+    });
+  } catch (error: any) {
+    res.status(400).json({ success: false, message: error.message });
+  }
+};
+
 //
 
 export const productController = {
   getAllProducts,
   createPorduct,
   getSingleProduuct,
+  updatePorduct,
 };

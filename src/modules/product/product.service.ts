@@ -20,8 +20,18 @@ const getSinglePorductDB = async (id: string) => {
   return response;
 };
 
+// ! for upudate product
+const updatePorductDatabase = async (id: string, data: Partial<Tproduct>) => {
+  const response = await productModel.findByIdAndUpdate({ _id: id }, data, {
+    new: true,
+  });
+
+  return response;
+};
+
 export const productServices = {
   createProductIntoDatabase,
   getDataFromDB,
   getSinglePorductDB,
+  updatePorductDatabase,
 };
