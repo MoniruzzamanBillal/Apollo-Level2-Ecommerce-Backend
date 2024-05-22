@@ -12,10 +12,23 @@ const createPorduct = async (req: Request, res: Response) => {
     const result =
       await productServices.createProductIntoDatabase(parsedValidationData);
 
+    const productResponse = result.toObject();
+
+    const { _id, __v, ...responseWithoutId } = productResponse;
+
+    responseWithoutId.variants = responseWithoutId.variants.map(
+      ({ _id, ...variant }) => variant
+    );
+
+    const { _id: inventoryId, ...inventory } = responseWithoutId.inventory;
+    responseWithoutId.inventory = inventory;
+
+    //  console.log(responseWithoutId);
+
     res.status(200).json({
       success: true,
       message: "Product created successfully!",
-      data: result,
+      data: responseWithoutId,
     });
   } catch (error: any) {
     res.status(400).json({
