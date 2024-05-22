@@ -9,11 +9,11 @@ const createOrderInDB = async (orderData: Torder) => {
   );
 
   if (!productData) {
-    throw new Error("Product not found");
+    throw new Error("Order not found");
   }
 
   if (orderData.quantity > productData?.inventory?.quantity) {
-    throw new Error("Insufficient stock");
+    throw new Error("Insufficient quantity available in inventory");
   }
 
   productData.inventory.quantity -= orderData.quantity;

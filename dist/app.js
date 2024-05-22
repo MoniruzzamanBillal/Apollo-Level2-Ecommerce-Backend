@@ -24,8 +24,13 @@ app.use((0, morgan_1.default)("dev"));
 // ! rouutes
 app.use("/api", product_route_1.productRouter);
 app.use("/api", order_route_1.orderRouter);
-app.use("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    res.status(200).json({ message: "server is running  !! " });
+app.get("/", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        res.send({ message: "server is running 2 !! " });
+    }
+    catch (error) {
+        next(error);
+    }
 }));
 app.all("*", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     res.status(400).json({ success: false, message: "Route not found " });
