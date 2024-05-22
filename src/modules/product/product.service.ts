@@ -29,9 +29,20 @@ const updatePorductDatabase = async (id: string, data: Partial<Tproduct>) => {
   return response;
 };
 
+//! delete product
+
+const deleteFromDB = async (id: string) => {
+  const response = await productModel.findByIdAndDelete({ _id: id });
+
+  return response;
+};
+
+//
+
 export const productServices = {
   createProductIntoDatabase,
   getDataFromDB,
   getSinglePorductDB,
   updatePorductDatabase,
+  deleteFromDB,
 };
