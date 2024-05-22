@@ -12,20 +12,16 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const express_1 = __importDefault(require("express"));
-const cors_1 = __importDefault(require("cors"));
-const morgan_1 = __importDefault(require("morgan"));
-const product_route_1 = require("./modules/product/product.route");
-const app = (0, express_1.default)();
-app.use(express_1.default.json());
-app.use((0, cors_1.default)());
-app.use((0, morgan_1.default)("dev"));
-// ! rouutes
-app.use("/api", product_route_1.productRouter);
-app.use("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    res.status(200).json({ message: "server is running  !! " });
-}));
-app.all("*", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    res.status(400).json({ message: "cannot get this route " });
-}));
-exports.default = app;
+exports.productServices = void 0;
+const product_model_1 = __importDefault(require("./product.model"));
+// ! creating produuct in database
+const createProductIntoDatabase = (produuct) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield product_model_1.default.create(produuct);
+    return result;
+});
+//! get all products from database
+const getDataFromDB = () => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield product_model_1.default.find();
+    return result;
+});
+exports.productServices = { createProductIntoDatabase, getDataFromDB };

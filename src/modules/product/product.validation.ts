@@ -1,5 +1,4 @@
 import { z } from "zod";
-import { Tproduct, Tvarient, Tinventory } from "./product.interface";
 
 // ! varient validatyion schema
 export const varientValidationSchema = z.object({
