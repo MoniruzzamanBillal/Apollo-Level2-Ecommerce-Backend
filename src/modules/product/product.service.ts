@@ -14,4 +14,14 @@ const getDataFromDB = async () => {
   return result;
 };
 
-export const productServices = { createProductIntoDatabase, getDataFromDB };
+// ! get single produuct based on id
+const getSinglePorductDB = async (id: string) => {
+  const response = await productModel.findOne({ _id: id });
+  return response;
+};
+
+export const productServices = {
+  createProductIntoDatabase,
+  getDataFromDB,
+  getSinglePorductDB,
+};

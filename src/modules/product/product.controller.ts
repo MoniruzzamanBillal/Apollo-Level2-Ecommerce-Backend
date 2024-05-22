@@ -68,7 +68,37 @@ const getAllProducts = async (req: Request, res: Response) => {
   }
 };
 
+// ! gert single product
+const getSingleProduuct = async (req: Request, res: Response) => {
+  try {
+    const { productId } = req.params;
+
+    const result = await productServices.getSinglePorductDB(productId);
+
+    const productObj = result?.toObject();
+
+    const { _id, __v, ...responseWithoutId } = productObj;
+    const { _id: inventoryId, ...inventory } = responseWithoutId.inventory;
+    responseWithoutId.inventory = inventory;
+
+    responseWithoutId.variants = responseWithoutId.variants.map(
+      ({ _id, ...varient }) => varient
+    );
+
+    res.status(200).json({
+      success: true,
+      message: "Products fetched successfully!",
+      data: responseWithoutId,
+    });
+  } catch (error: any) {
+    res.status(400).json({ success: false, message: error.message });
+  }
+};
+
+//
+
 export const productController = {
   getAllProducts,
   createPorduct,
+  getSingleProduuct,
 };
