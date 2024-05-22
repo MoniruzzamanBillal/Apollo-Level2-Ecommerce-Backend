@@ -43,7 +43,9 @@ const createPorduct = async (req: Request, res: Response) => {
 // ! for getting  all products
 const getAllProducts = async (req: Request, res: Response) => {
   try {
-    const result = await productServices.getDataFromDB();
+    const searchTerm = req.query.searchTerm as string | undefined;
+
+    const result = await productServices.getDataFromDB(searchTerm);
 
     const productObj = result?.map((product: any) => {
       const productObj = product.toObject();
