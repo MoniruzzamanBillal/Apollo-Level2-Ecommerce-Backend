@@ -1,7 +1,6 @@
 import { Request, Response } from "express";
 import { productValidationSchema } from "./product.validation";
 import { productServices } from "./product.service";
-import { Tproduct } from "./product.interface";
 
 // ! for createing new produuct
 const createPorduct = async (req: Request, res: Response) => {
@@ -13,23 +12,10 @@ const createPorduct = async (req: Request, res: Response) => {
     const result =
       await productServices.createProductIntoDatabase(parsedValidationData);
 
-    const productResponse = result.toObject();
-
-    const { _id, __v, ...responseWithoutId } = productResponse as Tproduct;
-
-    responseWithoutId.variants = responseWithoutId.variants.map(
-      ({ _id, ...variant }) => variant,
-    );
-
-    const { _id: inventoryId, ...inventory } = responseWithoutId.inventory;
-    responseWithoutId.inventory = inventory;
-
-    //  console.log(responseWithoutId);
-
     res.status(200).json({
       success: true,
       message: "Product created successfully!",
-      data: responseWithoutId,
+      data: result,
     });
   } catch (error: any) {
     res.status(400).json({
@@ -47,25 +33,12 @@ const getAllProducts = async (req: Request, res: Response) => {
 
     const result = await productServices.getDataFromDB(searchTerm);
 
-    const productObj = result?.map((product: any) => {
-      const productObj = product.toObject();
-      const { _id, __v, ...responseWithoutId } = productObj as Tproduct;
-
-      responseWithoutId.variants = responseWithoutId.variants.map(
-        ({ _id, ...varient }) => varient,
-      );
-      const { _id: inventoryId, ...inventory } = responseWithoutId.inventory;
-      responseWithoutId.inventory = inventory;
-
-      return responseWithoutId;
-    });
-
     res.status(200).json({
       success: true,
       message: searchTerm
         ? `Products matching search term '${searchTerm}' fetched successfully!`
         : "Products fetched successfully!",
-      data: productObj,
+      data: result,
     });
   } catch (error: any) {
     res.status(400).json({ success: false, message: error.message });
@@ -79,20 +52,10 @@ const getSingleProduuct = async (req: Request, res: Response) => {
 
     const result = await productServices.getSinglePorductDB(productId);
 
-    const productObj = result?.toObject();
-
-    const { _id, __v, ...responseWithoutId } = productObj as Tproduct;
-    const { _id: inventoryId, ...inventory } = responseWithoutId.inventory;
-    responseWithoutId.inventory = inventory;
-
-    responseWithoutId.variants = responseWithoutId.variants.map(
-      ({ _id, ...varient }) => varient,
-    );
-
     res.status(200).json({
       success: true,
       message: "Products fetched successfully!",
-      data: responseWithoutId,
+      data: result,
     });
   } catch (error: any) {
     res.status(400).json({ success: false, message: error.message });
@@ -109,7 +72,7 @@ const updatePorduct = async (req: Request, res: Response) => {
 
     const updatedResult = await productServices.updatePorductDatabase(
       productId,
-      parsedValidationData,
+      parsedValidationData
     );
 
     if (!updatedResult) {
@@ -119,20 +82,10 @@ const updatePorduct = async (req: Request, res: Response) => {
       });
     }
 
-    const updateDataObj = updatedResult.toObject();
-    const { _id, __v, ...dataWithoutId } = updateDataObj;
-    const { _id: inventoryId, ...inventory } = dataWithoutId.inventory;
-
-    dataWithoutId.inventory = inventory;
-
-    dataWithoutId.variants = dataWithoutId.variants.map(
-      ({ _id, ...varient }) => varient,
-    );
-
     res.status(200).json({
       success: true,
       message: "Product updated successfully!",
-      data: dataWithoutId,
+      data: updatedResult,
     });
   } catch (error: any) {
     res.status(400).json({ success: false, message: error.message });
